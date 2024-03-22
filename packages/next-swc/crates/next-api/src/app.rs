@@ -267,19 +267,22 @@ impl AppProject {
     fn rsc_module_context(self: Vc<Self>) -> Vc<ModuleAssetContext> {
         let transitions = [
             (
-                ECMASCRIPT_CLIENT_TRANSITION_NAME.to_string(),
+                ECMASCRIPT_CLIENT_TRANSITION_NAME.to_string().into(),
                 Vc::upcast(NextEcmascriptClientReferenceTransition::new(
                     Vc::upcast(self.client_transition()),
                     self.ssr_transition(),
                 )),
             ),
             (
-                "next-dynamic".to_string(),
+                "next-dynamic".to_string().into(),
                 Vc::upcast(NextDynamicTransition::new(Vc::upcast(
                     self.client_transition(),
                 ))),
             ),
-            ("next-ssr".to_string(), Vc::upcast(self.ssr_transition())),
+            (
+                "next-ssr".to_string().into(),
+                Vc::upcast(self.ssr_transition()),
+            ),
         ]
         .into_iter()
         .collect();
@@ -296,20 +299,20 @@ impl AppProject {
     fn edge_rsc_module_context(self: Vc<Self>) -> Vc<ModuleAssetContext> {
         let transitions = [
             (
-                ECMASCRIPT_CLIENT_TRANSITION_NAME.to_string(),
+                ECMASCRIPT_CLIENT_TRANSITION_NAME.to_string().into(),
                 Vc::upcast(NextEcmascriptClientReferenceTransition::new(
                     Vc::upcast(self.client_transition()),
                     self.edge_ssr_transition(),
                 )),
             ),
             (
-                "next-dynamic".to_string(),
+                "next-dynamic".to_string().into(),
                 Vc::upcast(NextDynamicTransition::new(Vc::upcast(
                     self.client_transition(),
                 ))),
             ),
             (
-                "next-ssr".to_string(),
+                "next-ssr".to_string().into(),
                 Vc::upcast(self.edge_ssr_transition()),
             ),
         ]
@@ -642,7 +645,7 @@ impl AppEndpoint {
         let client_relative_path = this.app_project.project().client_relative_path();
         let client_relative_path_ref = client_relative_path.await?;
 
-        let server_path = node_root.join("server".to_string());
+        let server_path = node_root.join("server".to_string().into());
 
         let mut server_assets = vec![];
         let mut client_assets = vec![];
@@ -781,9 +784,9 @@ impl AppEndpoint {
             };
             let manifest_path_prefix = &app_entry.original_name;
             let app_build_manifest_output = Vc::upcast(VirtualOutputAsset::new(
-                node_root.join(format!(
-                    "server/app{manifest_path_prefix}/app-build-manifest.json",
-                )),
+                node_root.join(
+                    format!("server/app{manifest_path_prefix}/app-build-manifest.json",).into(),
+                ),
                 AssetContent::file(
                     File::from(serde_json::to_string_pretty(&app_build_manifest)?).into(),
                 ),
@@ -795,9 +798,8 @@ impl AppEndpoint {
                 ..Default::default()
             };
             let build_manifest_output = Vc::upcast(VirtualOutputAsset::new(
-                node_root.join(format!(
-                    "server/app{manifest_path_prefix}/build-manifest.json",
-                )),
+                node_root
+                    .join(format!("server/app{manifest_path_prefix}/build-manifest.json",).into()),
                 AssetContent::file(
                     File::from(serde_json::to_string_pretty(&build_manifest)?).into(),
                 ),
