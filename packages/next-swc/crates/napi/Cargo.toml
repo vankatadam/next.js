@@ -109,10 +109,11 @@ turbopack-binding = { workspace = true, features = [
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 getrandom = { version = "0.2.9", default-features = false, features = ["js"] }
 iana-time-zone = { version = "*", features = ["fallback"] }
+swc_core = { workspace = true, features = ["ecma_visit_path"] }
 turbopack-binding = { workspace = true, features = [
   "__swc_core_binding_napi",
   "__swc_core_serde",
-  "__feature_mdx_rs",
+  "__feature_mdx_rs"
 ] }
 
 # wasi-only dependencies.
